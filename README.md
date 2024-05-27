@@ -226,4 +226,3 @@ int main() {
 ---
 
 Ce programme permet de chiffrer et déchiffrer des messages en utilisant les méthodes de chiffrement de César et de Vigenère, avec une gestion spéciale des espaces.
-```
