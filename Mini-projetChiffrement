@@ -1,0 +1,132 @@
+#include <stdio.h>
+#include <string.h>
+
+// Fonction pour chiffrer le texte en utilisant le chiffrement de César
+void chiffrement_cesar(char* texte, int decalage) {
+    for (int i = 0; texte[i] != '\0'; i++) {
+        if (texte[i] >= 'A' && texte[i] <= 'Z') {
+            texte[i] = ((texte[i] - 'A' + decalage) % 26) + 'A';
+        } else if (texte[i] >= 'a' && texte[i] <= 'z') {
+            texte[i] = ((texte[i] - 'a' + decalage) % 26) + 'a';
+        }
+    }
+}
+
+// Fonction pour déchiffrer le texte en utilisant le chiffrement de César
+void dechiffrement_cesar(char* texte, int decalage) {
+    chiffrement_cesar(texte, 26 - decalage);
+}
+
+// Fonction pour chiffrer le texte en utilisant le chiffrement de Vigenère
+void chiffrerVigenere(char* message, char* cle) {
+    int longueur_message = strlen(message);
+    int longueur_cle = strlen(cle);
+
+    for (int i = 0; i < longueur_message; i++) {
+        int n = i % longueur_cle;
+        int decalage;
+
+        if (cle[n] >= 'A' && cle[n] <= 'Z') {
+            decalage = cle[n] - 'A';
+        } else if (cle[n] >= 'a' && cle[n] <= 'z') {
+            decalage = cle[n] - 'a';
+        } else {
+            // Si la clé contient un caractère non alphabétique, on ne change pas le décalage
+            decalage = 0;
+        }
+
+        if (message[i] >= 'A' && message[i] <= 'Z') {
+            message[i] = ((message[i] - 'A' + decalage) % 26) + 'A';
+        } else if (message[i] >= 'a' && message[i] <= 'z') {
+            message[i] = ((message[i] - 'a' + decalage) % 26) + 'a';
+        }
+    }
+}
+
+// Fonction pour déchiffrer le texte en utilisant le chiffrement de Vigenère
+void dechiffrerVigenere(char* message, char* cle) {
+    int longueur_message = strlen(message);
+    int longueur_cle = strlen(cle);
+
+    for (int i = 0; i < longueur_message; i++) {
+        int n = i % longueur_cle;
+        int decalage;
+
+        if (cle[n] >= 'A' && cle[n] <= 'Z') {
+            decalage = cle[n] - 'A';
+        } else if (cle[n] >= 'a' && cle[n] <= 'z') {
+            decalage = cle[n] - 'a';
+        } else {
+            // Si la clé contient un caractère non alphabétique, on ne change pas le décalage
+            decalage = 0;
+        }
+
+        if (message[i] >= 'A' && message[i] <= 'Z') {
+            message[i] = ((message[i] - 'A' - decalage + 26) % 26) + 'A';
+        } else if (message[i] >= 'a' && message[i] <= 'z') {
+            message[i] = ((message[i] - 'a' - decalage + 26) % 26) + 'a';
+        }
+    }
+}
+
+
+void supprimerEspaces(char* message) {
+    int longueur_message = strlen(message);
+    int j = 0; // Indice pour le nouveau message sans espaces
+    
+    // Parcourt la chaîne de caractères
+    for (int i = 0; i < longueur_message; i++) {
+        // Si le caractère courant n'est pas un espace, le conserve
+        if (message[i] != ' ') {
+            message[j] = message[i];
+            j++;
+        }
+    }
+    
+    // Ajoute le caractère de fin de chaîne
+    message[j] = '\0';
+}
+
+
+
+
+
+
+int main() {
+    char message[1024];
+    char cle[1024];
+    int decalage;
+
+    printf("Entrez le message à crypter : ");
+    fgets(message, sizeof(message), stdin);
+    // Supprimer le caractère de nouvelle ligne à la fin du message
+    message[strcspn(message, "\n")] = 0;
+
+    supprimerEspaces(message);
+
+
+    printf("Entrez un décalage pour le chiffrement de César : ");
+    scanf("%d", &decalage);
+    getchar();  // Consommer le caractère de nouvelle ligne restant
+
+    chiffrement_cesar(message, decalage);
+    printf("Message chiffré avec César : %s\n", message);
+
+    dechiffrement_cesar(message, decalage);
+    printf("Message déchiffré avec César : %s\n", message);
+
+    printf("Entrez la clé pour le chiffrement de Vigenère : ");
+    fgets(cle, sizeof(cle), stdin);
+    // Supprimer le caractère de nouvelle ligne à la fin de la clé
+    cle[strcspn(cle, "\n")] = 0;
+
+    // Chiffrer le message avec Vigenère
+    chiffrerVigenere(message, cle);
+    printf("Message chiffré avec Vigenère : %s\n", message);
+
+    // Déchiffrer le message avec Vigenère
+    dechiffrerVigenere(message, cle);
+    printf("Message déchiffré avec Vigenère : %s\n", message);
+
+    return 0;
+}
